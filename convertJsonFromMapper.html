@@ -1,15 +1,17 @@
 <script>
 
 (window => {	
-	"use strict";
+	// "use strict";
 	var define_Library = function() {
-		var library = {};
+		// var library = {};
 		function _RecFormatObj(mapper, data) {
 		  this._mapper = mapper;
 		  this._reqJson = data;
 		}
-		library.recFormat = (mapper, data) => {
+		var sSelf = this;
+		sSelf.recFormat = (mapper, data) => {
 			//validations
+			var sSelf = this;
 			if(!mapper || typeof(mapper) != 'object' || Object.keys(mapper).length <= 0) { 
 				// console.log("please send mapper{} as first argument"); 
 				return;
@@ -31,11 +33,11 @@
 	            if (newDataObj._mapper.hasOwnProperty(key) && newDataObj._reqJson[key] != null) {
 	                if(newDataObj._reqJson[key] instanceof Array) {
 	                	newDataObj._reqJson[key].forEach(value => {
-	                		library.recFormat(newDataObj._reqJson[key][i]);
+	                		sSelf.recFormat(newDataObj._reqJson[key][i]);
 	                	})
 	                } else {
 	                    if(typeof(newDataObj._reqJson[key] == 'object')) {
-	                        library.recFormat(newDataObj._reqJson[key]);
+	                        sSelf.recFormat(newDataObj._reqJson[key]);
 	                    }
 	                }
 	                formattedData[newDataObj._mapper[key]] = newDataObj._reqJson[key];
@@ -45,7 +47,9 @@
 	        }
 	        return formattedData;
 		};
-		return library;
+		return {
+			recFormat:recFormat
+		};
 	}
 	
 	//define globally if it doesn't already exist
@@ -58,8 +62,8 @@
 })(window);
 
 // driver to test
-//var xx = s.recFormat( {"n": "name", "a": "age"} , {"n":"Alice", "a": 26});
-//console.log(xx);
+// var xx = s.recFormat( {"n": "name", "a": "age"} , {"n":"Alice", "a": 26});
+// console.log(xx);
 
 </script>
 
